@@ -1,0 +1,63 @@
+:root {
+  --color-page-bg: #fff;
+  --color-text-1: #333;
+  --color-text-2: #555;
+  --color-border: #cbcbcb;
+  --border: 2px solid var(--color-border);
+  --anchor: #1550cf;
+  --anchor-hover: #f11616;
+  --color-error: #f11616;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 1rem;
+  margin: 0;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  line-height: 1.33;
+  font-size: 16px;
+  background: var(--color-page-bg);
+  color: var(--color-text-1);
+}
+
+h1 {
+  font-family: "Commissioner", sans-serif;
+  font-weight: 800;
+  font-size: 2.5rem;
+  line-height: 1.15;
+  margin: 0 0 0.25rem;
+  padding: 0;
+}
+
+h2 {
+  font-family: "Commissioner", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  padding: 0;
+  margin: 0;
+}
+p {
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: var(--anchor);
+  &:hover {
+    color: var(--anchor-hover);
+  }
+}
+
+strong {
+  font-weight: 500;
+}
+
+li:not(:first-child) {
+  margin-top: 0.25rem;
+}

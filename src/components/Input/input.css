@@ -1,0 +1,25 @@
+label {
+  font-weight: 400;
+  display: block;
+  font-size: 1.25rem;
+
+  ::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+  input {
+    background: transparent;
+    font-family: inherit;
+    margin-top: 0.25rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    border: var(--border);
+    font-weight: 400;
+    min-width: 12rem;
+    font-size: 1.25rem;
+    field-sizing: content;
+
+    &[aria-invalid="true"] {
+      border-color: var(--color-error);
+    }
+  }
+}

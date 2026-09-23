@@ -1,0 +1,15 @@
+main {
+  margin-top: 3rem;
+  .selectform {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .formerror {
+    margin-top: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--color-error);
+  }
+}
