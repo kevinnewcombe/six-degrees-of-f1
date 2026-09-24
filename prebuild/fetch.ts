@@ -5,7 +5,7 @@ const fetchResults: boolean = true; // set to false for testing other parts of t
 import type { JolpiResults } from "@shared-types/api";
 
 const replaceName = (start: string) => {
-  const nameReplacements: [string, string][] = [["Andrea Kimi Antonelli", "Kimi Antonelli"]]; 
+  const nameReplacements: [string, string][] = [["Andrea Kimi Antonelli", "Kimi Antonelli"]];
   const driverNameReplacement = nameReplacements.find((e) => e[0] == start);
   return driverNameReplacement ? driverNameReplacement[1] : start;
 };
@@ -96,7 +96,8 @@ const start = async () => {
     resultsOffset = raceResults.filter((r) => r.season == mostRecentSeason).reduce((acc, curr) => acc + curr.drivers.length, 0);
   }
 
-  if (fetchResults) { // If the script is set to get new results, get them
+  if (fetchResults) {
+    // If the script is set to get new results, get them
     for (let i = mostRecentSeason; i <= new Date().getFullYear(); i++) {
       await addRaces(i, i == mostRecentSeason ? resultsOffset : 0);
       await fs.writeFile(raceResultsPath, JSON.stringify(raceResults));
@@ -116,12 +117,9 @@ const start = async () => {
         if (!driverName || !constructorName) {
           throw new Error(`no startId, driverName, or constructorName found for ${season} round ${raceResults[i].round}`);
         }
-        let startDriver = teammates.find((t) => t.driverName == driverName);
+        let startDriver = teammates.find((t) => t[0] == driverName);
         if (!startDriver) {
-          teammates.push({
-            driverName,
-            teammates: [],
-          });
+          teammates.push([driverName, []]);
           startDriver = teammates[teammates.length - 1];
         }
 
@@ -137,27 +135,21 @@ const start = async () => {
           if (!teammateName) {
             throw new Error("no teammateId found for " + driverName + " " + season + " round " + raceResults[i].round);
           }
-          let currentTeammate = startDriver.teammates.find((d) => d.driverName == teammateName);
+          let currentTeammate = startDriver[1].find((d) => d[0] == teammateName);
           if (!currentTeammate) {
-            startDriver.teammates.push({
-              driverName: teammateName,
-              teams: [],
-            });
-            currentTeammate = startDriver.teammates[startDriver.teammates.length - 1];
+            startDriver[1].push([teammateName, []]);
+            currentTeammate = startDriver[1][startDriver[1].length - 1];
           }
 
           // check if this is the first time they've driver for the same constructor
-          let currentTeam = currentTeammate.teams.find((d) => d.constructorName == constructorName);
+          let currentTeam = currentTeammate[1].find((d) => d[0] == constructorName);
           if (!currentTeam) {
-            currentTeammate.teams.push({
-              constructorName,
-              seasons: [],
-            });
-            currentTeam = currentTeammate.teams[currentTeammate.teams.length - 1];
+            currentTeammate[1].push([constructorName, []]);
+            currentTeam = currentTeammate[1][currentTeammate[1].length - 1];
           }
 
-          if (!currentTeam.seasons.includes(season)) {
-            currentTeam.seasons.push(season);
+          if (!currentTeam[1].includes(season)) {
+            currentTeam[1].push(season);
           }
         }
       }
@@ -166,8 +158,8 @@ const start = async () => {
 
   // Sort drivers by their name
   teammates.sort((a, b) => {
-    const c = a.driverName;
-    const d = b.driverName;
+    const c = a[0];
+    const d = b[0];
     if (c < d) {
       return -1;
     } else if (c > d) {
@@ -177,7 +169,7 @@ const start = async () => {
       return 0;
     }
   });
-  await fs.writeFile("./shared/data/drivers.json", JSON.stringify(teammates.sort((a, b) => a.driverName.localeCompare(b.driverName))));
+  await fs.writeFile("./shared/data/drivers.json", JSON.stringify(teammates.sort((a, b) => a[0].localeCompare(b[0]))));
   console.log(`Wrote to teammates.json`);
   return;
 };

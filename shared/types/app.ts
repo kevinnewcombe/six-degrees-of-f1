@@ -10,16 +10,17 @@ export interface RaceResult {
   }[];
 }
 
-export interface Driver {
-  driverName: string;
-  teammates: {
-    driverName: string;
-    teams: {
-      constructorName: string;
-      seasons: number[];
-    }[];
-  }[];
-}
+export type Driver = [
+  string, // Driver Name
+  [ // Teammates
+    string, // Teammate name
+    [
+      string, // Constructor name
+      number[] // Seasons
+    ][]
+  ][]
+]
+
 
 // For the paths between drivers that's returned to the user
 export interface ExpandedPath {
