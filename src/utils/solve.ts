@@ -2,6 +2,11 @@ import type { Driver, ExpandedPath, SolutionResults } from "@shared-types/app";
 import driverListRaw from "@data/drivers.json";
 const driverList = driverListRaw as unknown as Driver[];
 const solveCache = new Map<string, SolutionResults>();
+
+// Indexes
+const DRIVER_NAME = 0;
+const TEAMMATES = 1;
+
 export const solve = (start: string, end: string): SolutionResults => {
   const cacheKey = `${start}|${end}`;
   const cached = solveCache.get(cacheKey);
@@ -9,10 +14,10 @@ export const solve = (start: string, end: string): SolutionResults => {
 
   // Confirm the names searched are actual drivers
   const invalidDrivers: string[] = [];
-  if (!driverList.some((d) => d[0] == start)) {
+  if (!driverList.some((d) => d[DRIVER_NAME] == start)) {
     invalidDrivers.push(start);
   }
-  if (!driverList.some((d) => d[0] == end)) {
+  if (!driverList.some((d) => d[DRIVER_NAME] == end)) {
     invalidDrivers.push(end);
   }
   if (invalidDrivers.length) {
@@ -39,16 +44,16 @@ export const solve = (start: string, end: string): SolutionResults => {
       if (driver) {
         allDrivers.push(driver);
         checkedDrivers.push(driver[driver.length - 1]);
-        const teammates = driverList.find((e) => e[0] == driver[driver.length - 1]);
+        const teammates = driverList.find((e) => e[DRIVER_NAME] == driver[driver.length - 1]);
         if (teammates) {
-          if (teammates[1]) {
-            teammates[1].forEach((teammate) => {
-              const currentDriverObj = driver.concat([teammate[0]]);
-              if (teammate[0] == end) {
+          if (teammates[TEAMMATES]) {
+            teammates[TEAMMATES].forEach((teammate) => {
+              const currentDriverObj = driver.concat([teammate[DRIVER_NAME]]);
+              if (teammate[DRIVER_NAME] == end) {
                 isSolved = true; // We've found a path
                 allDrivers.push(currentDriverObj);
               } else {
-                if (!checkedDrivers.includes(teammate[0])) {
+                if (!checkedDrivers.includes(teammate[DRIVER_NAME])) {
                   // If it's a new driver, push them into the queue
                   nextPaths.push(currentDriverObj);
                 }
@@ -79,15 +84,15 @@ export const solve = (start: string, end: string): SolutionResults => {
   validPaths.forEach((p) => {
     const path: ExpandedPath[] = [];
     for (let i = 0; i < p.length - 1; i++) {
-      const start = driverList.find((d) => d[0] == p[i]);
+      const start = driverList.find((d) => d[DRIVER_NAME] == p[i]);
       const endId = p[i + 1];
-      const end = driverList.find((d) => d[0] == endId);
+      const end = driverList.find((d) => d[DRIVER_NAME] == endId);
       if (start && end) {
-        const teammate = start[1].find((t) => t[0] == endId);
+        const teammate = start[TEAMMATES].find((t) => t[DRIVER_NAME] == endId);
         if (teammate) {
           path.push({
-            start: start[0],
-            end: end[0],
+            start: start[DRIVER_NAME],
+            end: end[DRIVER_NAME],
             teams: teammate[1].map(([constructorName, seasons]) => ({ constructorName, seasons })),
           });
         }
