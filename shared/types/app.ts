@@ -11,12 +11,12 @@ export interface RaceResult {
 }
 
 export type Driver = [
-  string,
-  [
-    string,
+  string, // Driver Name
+  [ // Teammates
+    string, // Teammate name
     [
-      string,
-      number[]
+      string, // Constructor name
+      number[] // Seasons
     ][]
   ][]
 ]

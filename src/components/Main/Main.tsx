@@ -37,7 +37,7 @@ export default function Main({ drivers }: {
   }, [start, end]);
 
   const updateDrivers = (key: string, driverName: string) => {
-    if (drivers.some((d) => d.driverName == driverName)) {
+    if (drivers.some((d) => d[0] == driverName)) {
       if (key == 'start') {
         setStart(driverName);
       } else if (key == 'end') {
@@ -54,7 +54,7 @@ export default function Main({ drivers }: {
         <Input selectId={'start'} isValid={fieldsAreValid} defaultValue={start} onUpdate={updateDrivers} />
         <Input selectId={'end'} isValid={fieldsAreValid} defaultValue={end} onUpdate={updateDrivers} />
         <datalist id="nameslist">
-          {drivers.map(driver => <option key={`nameslist-${driver.driverName}`}>{driver.driverName}</option>)}
+          {drivers.map(driver => <option key={`nameslist-${driver[0]}`}>{driver[0]}</option>)}
         </datalist>
       </form>
       <div aria-live="polite">
