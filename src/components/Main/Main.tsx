@@ -15,26 +15,30 @@ export default function Main({ drivers }: {
   const [isPending, setIsPending] = useState<boolean>(false);
   const workerRef = useRef<Worker>(null);
 
+  const fieldsAreValid = (start != end || start == '' || end == '');
 
   useEffect(() => {
-    if (workerRef.current) {
-      workerRef.current.terminate(); // kill any in-progress calls
-    }
-    workerRef.current = new Worker(
-      new URL("../../utils/solve.worker", import.meta.url),
-      { type: "module" },
-    );
+    if (fieldsAreValid) {
+      if (workerRef.current) {
+        workerRef.current.terminate(); // kill any in-progress calls
+      }
+      workerRef.current = new Worker(
+        new URL("../../utils/solve.worker", import.meta.url),
+        { type: "module" },
+      );
 
-    workerRef.current.onmessage = (e: MessageEvent<WorkerResults>) => {
-      setResults(e.data.result);
-      setIsPending(false);
-    };
+      workerRef.current.onmessage = (e: MessageEvent<WorkerResults>) => {
+        setResults(e.data.result);
+        setIsPending(false);
+      };
 
-    if (workerRef.current && start != '' && end !== '') {
-      setIsPending(true);
-      workerRef.current.postMessage({ start, end });
+      if (workerRef.current && start != '' && end !== '') {
+        setIsPending(true);
+        workerRef.current.postMessage({ start, end });
+      }
+
     }
-  }, [start, end]);
+  }, [start, end, fieldsAreValid]);
 
   const updateDrivers = (key: string, driverName: string) => {
     if (drivers.some((d) => d[0] == driverName)) {
@@ -46,7 +50,6 @@ export default function Main({ drivers }: {
     }
   }
 
-  const fieldsAreValid = (start != end || start == '' || end == '');
 
   return (
     <main>
