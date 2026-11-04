@@ -1,3 +1,4 @@
+import { Fragment } from 'react/jsx-runtime';
 import './solution.css';
 import { solve } from '../../utils/solve';
 
@@ -48,7 +49,7 @@ export default function Solution({ results }: {
       {
         paths.map((path, pathIndex) => {
           return (
-            <div key={`solution-${pathIndex}`}>
+            <Fragment key={`solution-${pathIndex}`}>
               <ol>
                 {path.map((pair, pairIndex) => {
                   const teams = pair.teams.map((t) => `${t.constructorName} (${prettySeasons(t.seasons)})`);
@@ -59,7 +60,7 @@ export default function Solution({ results }: {
                 }
               </ol>
               {pathIndex < paths.length - 1 ? <span className="paths-divider">or</span> : ''}
-            </div>
+            </Fragment>
           )
         })
       }
