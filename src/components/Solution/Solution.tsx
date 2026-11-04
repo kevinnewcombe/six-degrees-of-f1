@@ -42,7 +42,9 @@ export default function Solution({ results }: {
 
   return (
     <div className="solution">
-      <h2 className="title">{paths[0][0].start} can be connected to {paths[0][paths[0].length - 1].end} in {noOfSteps} step{noOfSteps > 1 && 's'}.</h2>
+      <h2 className="title">
+        {` ${paths[0][0].start} can be connected to ${paths[0][paths[0].length - 1].end} in ${noOfSteps} step${noOfSteps > 1 && 's'}.`}
+      </h2>
       {
         paths.map((path, pathIndex) => {
           return (
