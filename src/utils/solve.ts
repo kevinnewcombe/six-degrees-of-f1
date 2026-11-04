@@ -71,7 +71,7 @@ export const solve = (start: string, end: string): SolutionResults => {
     // Even if we haven't found a connection, end the loop when we've run out
     // of teammate to check or we've hit a depth of 15, which might be a sign of
     // an infinite loop
-    if ((!isSolved && currentDepth == 15) || currentPaths.length == 0) {
+    if (!isSolved && (currentDepth == 15 || currentPaths.length == 0)) {
       return {
         error: true,
         message: `A path can't be found between ${start} and ${end}.`,
